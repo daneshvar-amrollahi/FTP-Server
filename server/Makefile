@@ -10,7 +10,8 @@ OBJECTS = \
 	$(BUILD_DIR)/Main.o 		\
 	$(BUILD_DIR)/Server.o 		\
 	$(BUILD_DIR)/ConfigReader.o \
-	$(BUILD_DIR)/User.o 		
+	$(BUILD_DIR)/User.o 		\
+	$(BUILD_DIR)/CommandHandler.o
 	
 UserSensitivityList = \
 	$(SRC_DIR)/User.cpp
@@ -18,6 +19,9 @@ UserSensitivityList = \
 ConfigReaderSensitivityList = \
 	$(SRC_DIR)/ConfigReader.cpp \
 	$(INCLUDE_DIR)/User.hpp
+
+CommandHandlerSensitivityList = \
+	$(SRC_DIR)/CommandHandler.cpp
 
 ServerSensitivityList = \
 	$(SRC_DIR)/Server.cpp \
@@ -39,6 +43,9 @@ $(BUILD_DIR)/Main.o: $(MainSensitivityList)
 
 $(BUILD_DIR)/Server.o: $(ServerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/Server.cpp -o $(BUILD_DIR)/Server.o
+
+$(BUILD_DIR)/CommandHandler.o: $(CommandHandlerSensitivityList)
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/CommandHandler.cpp -o $(BUILD_DIR)/CommandHandler.o
 
 $(BUILD_DIR)/ConfigReader.o: $(ConfigReaderSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/ConfigReader.cpp -o $(BUILD_DIR)/ConfigReader.o

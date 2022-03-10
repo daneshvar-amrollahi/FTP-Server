@@ -12,6 +12,7 @@ class Server
 public:
     Server(const std::string& config_path);
     void run();
+    void* handle_connection(void* command_fd, void* data_fd);
 
 private:
     ConfigReader configReader;
