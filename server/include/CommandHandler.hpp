@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "Logger.hpp"
+
 class CommandHandler
 {
 public:
@@ -11,6 +13,7 @@ public:
 
 private:
     int data_fd;
+    static Logger logger;
 };
 
 #endif

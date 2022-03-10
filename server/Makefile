@@ -7,12 +7,16 @@ CFLAGS = -std=c++11 -I$(INCLUDE_DIR)
 EXECUTABLE_FILE = Server.out
 
 OBJECTS = \
-	$(BUILD_DIR)/Main.o 		\
-	$(BUILD_DIR)/Server.o 		\
-	$(BUILD_DIR)/ConfigReader.o \
-	$(BUILD_DIR)/User.o 		\
-	$(BUILD_DIR)/CommandHandler.o
+	$(BUILD_DIR)/Main.o 			\
+	$(BUILD_DIR)/Server.o 			\
+	$(BUILD_DIR)/ConfigReader.o 	\
+	$(BUILD_DIR)/User.o 			\
+	$(BUILD_DIR)/CommandHandler.o	\
+	$(BUILD_DIR)/Logger.o
 	
+LoggerSensitivityList = \
+	$(SRC_DIR)/Logger.cpp
+
 UserSensitivityList = \
 	$(SRC_DIR)/User.cpp
 
@@ -21,7 +25,8 @@ ConfigReaderSensitivityList = \
 	$(INCLUDE_DIR)/User.hpp
 
 CommandHandlerSensitivityList = \
-	$(SRC_DIR)/CommandHandler.cpp
+	$(SRC_DIR)/CommandHandler.cpp \
+	$(INCLUDE_DIR)/Logger.hpp
 
 ServerSensitivityList = \
 	$(SRC_DIR)/Server.cpp \
@@ -52,6 +57,9 @@ $(BUILD_DIR)/ConfigReader.o: $(ConfigReaderSensitivityList)
 
 $(BUILD_DIR)/User.o: $(UserSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/User.cpp -o $(BUILD_DIR)/User.o
+
+$(BUILD_DIR)/Logger.o: $(LoggerSensitivityList)
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/Logger.cpp -o $(BUILD_DIR)/Logger.o
 
 
 $(EXECUTABLE_FILE): $(OBJECTS)
