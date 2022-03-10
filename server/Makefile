@@ -12,8 +12,12 @@ OBJECTS = \
 	$(BUILD_DIR)/ConfigReader.o 	\
 	$(BUILD_DIR)/User.o 			\
 	$(BUILD_DIR)/CommandHandler.o	\
-	$(BUILD_DIR)/Logger.o
+	$(BUILD_DIR)/Logger.o			\
+	$(BUILD_DIR)/Exception.o 		
 	
+ExceptionSensitivityList = \
+	$(SRC_DIR)/Exception.cpp
+
 LoggerSensitivityList = \
 	$(SRC_DIR)/Logger.cpp
 
@@ -60,6 +64,9 @@ $(BUILD_DIR)/User.o: $(UserSensitivityList)
 
 $(BUILD_DIR)/Logger.o: $(LoggerSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/Logger.cpp -o $(BUILD_DIR)/Logger.o
+
+$(BUILD_DIR)/Exception.o: $(ExceptionSensitivityList)
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/Exception.cpp -o $(BUILD_DIR)/Exception.o
 
 
 $(EXECUTABLE_FILE): $(OBJECTS)
