@@ -15,6 +15,9 @@ OBJECTS = \
 	$(BUILD_DIR)/Logger.o			\
 	$(BUILD_DIR)/Exception.o 		
 	
+ResponseSensitivityList = \
+	$(SRC_DIR)/Response.cpp
+
 ExceptionSensitivityList = \
 	$(SRC_DIR)/Exception.cpp
 
@@ -67,6 +70,9 @@ $(BUILD_DIR)/Logger.o: $(LoggerSensitivityList)
 
 $(BUILD_DIR)/Exception.o: $(ExceptionSensitivityList)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/Exception.cpp -o $(BUILD_DIR)/Exception.o
+
+$(BUILD_DIR)/Response.o: $(ResponseSensitivityList)
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/Response.cpp -o $(BUILD_DIR)/Response.o
 
 
 $(EXECUTABLE_FILE): $(OBJECTS)
