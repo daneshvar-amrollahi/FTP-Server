@@ -10,6 +10,8 @@ class CommandHandler
 public:
     CommandHandler(int data_fd);
     std::string runCommand(std::string input);
+    int handleUser(std::string username);
+    //add similar methods for each command
 
 private:
     int data_fd;

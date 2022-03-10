@@ -22,3 +22,14 @@ std::string runCommand(std::string input) {
     */
    return "response"; //remove later
 }
+
+int CommandHandler::handleUser(std::string username)
+{
+    /*if not logged in
+        throw exception
+    
+    ... (logic)
+
+    */
+    return USERNAME_OK;
+}
