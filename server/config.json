@@ -4,17 +4,17 @@
           "user": "Ali",
           "password": "1234",
           "admin": "true",
-          "size": "1000000"
+          "size": "512"
       },
       {
           "user": "Mohsen",
           "password": "1234",
           "admin": "false",
-          "size": "1000000"
+          "size": "1024"
       }
     ],
       "files": [
         "config.json",
-        "a.json"
+        "test.json"
       ]
 }
