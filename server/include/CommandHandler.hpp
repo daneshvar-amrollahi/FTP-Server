@@ -2,6 +2,8 @@
 #define __COMMAND_HANDLER_H__
 
 #include <string>
+#include <vector>
+#include <iostream>
 
 #include "Logger.hpp"
 
@@ -14,6 +16,8 @@ public:
     //add similar methods for each command
 
 private:
+    std::vector<std::string> getSplitted(const std::string& s);
+
     int data_fd;
     static Logger logger;
 };

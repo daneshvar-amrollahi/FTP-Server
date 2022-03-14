@@ -5,9 +5,27 @@ CommandHandler::CommandHandler(int data_fd) : data_fd(data_fd) {
 
 }
 
-std::string runCommand(std::string input) {
+std::vector<std::string> CommandHandler::getSplitted(const std::string& s) {
+    std::vector<std::string> res;
+    std::string tmp = "";
+    for (int i = 0; i < s.size(); i++) {
+        if (s[i] == ' ') {
+            res.push_back(tmp);
+            tmp = "";
+        } else {
+            tmp += s[i];
+        }
+    }
+    res.push_back(tmp);
+    return res;
+}
 
-    //extract command and arguments from input using CommandParser
+std::string CommandHandler::runCommand(std::string input) {
+
+    std::vector<std::string> splitted = getSplitted(input);
+    std::string command = splitted[0];
+    std::vector<std::string> args(splitted.begin() + 1, splitted.end());
+
 
     /*
     Response response;

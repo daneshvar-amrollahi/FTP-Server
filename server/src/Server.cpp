@@ -61,8 +61,9 @@ void* handleConnection(void* arguments) {
         bzero(read_buffer, 1024);
         if (recv(command_fd, read_buffer, sizeof(read_buffer), 0) > 0)
         {
-            //send_buffer = commandHandler->runCommand(std::string(read_buffer));
             std::cout << "SERVER received command " << std::string(read_buffer) << " from CLIENT (" << command_fd << ", " << data_fd << ")\n";
+            send_buffer = commandHandler->runCommand(std::string(read_buffer));
+            // std::cout << "Response: " << send_buffer << "\n";
             pthread_exit(NULL);
         }
     
