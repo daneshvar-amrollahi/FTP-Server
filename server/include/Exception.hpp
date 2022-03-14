@@ -7,12 +7,17 @@ class Exception
 {
 public:
     int getNumber();
-
+    std::string getError();
 protected:
-    std::string error = "";
+    std::string error = "500: Error";
     int number = 500;
 };
 
-//introduce subclasses of exception for each error
+class InvalidUsernameOrPassword : public Exception
+{
+private:
+    std::string error = "430: Invalid username or password";
+    int number = 430;
+};
 
 #endif
