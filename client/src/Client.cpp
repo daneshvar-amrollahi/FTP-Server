@@ -33,11 +33,12 @@ int connectServer(int port)
 
 void Client::run() {
     std::string command;
-    int data_fd,command_fd;
-    data_fd=connectServer(8080);
-    command_fd=connectServer(8081);
+    int command_fd,data_fd;
+    command_fd = connectServer(8080);
+    data_fd = connectServer(8081);
+    std::cout << "CLIENT connected: " << command_fd << " " << data_fd << std::endl;
     while(true){
-        std::getline(std::cin,command);
+        std::getline(std::cin, command);
         send(command_fd, command.c_str(), command.size(), 0);
     }
     
