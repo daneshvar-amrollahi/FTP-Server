@@ -3,9 +3,23 @@
 
 #include <vector>
 #include <string>
+#include <thread>
+#include <pthread.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <sys/time.h>
+#include <iostream>
 
 #include "User.hpp"
 #include "ConfigReader.hpp"
+
+const int MAX_THREADS = 1024;
+const int COMMAND_PORT = 8080;
+const int DATA_PORT = 8081;
+
 
 class Server
 {

@@ -1,14 +1,6 @@
 #include "Server.hpp"
 #include "CommandHandler.hpp"
 
-#include <unistd.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <string.h>
-#include <arpa/inet.h>
-#include <sys/time.h>
-#include <iostream>
-
 
 Server::Server(const std::string& config_path) 
     : 
@@ -46,89 +38,83 @@ int acceptClient(int server_fd) {
     return client_fd;
 }
 
-void handleConnection(int command_fd, int data_fd) {
+struct arg_struct {
+    int _tid;
+    int _command_fd;
+    int _data_fd;
+};
 
-    int bytes_received;
-    char buffer[1024];
-    std::string message;
+void* handleConnection(void* arguments) {
+    struct arg_struct *args = (struct arg_struct *)arguments;
+    int tid = args->_tid;
+    int command_fd = args->_command_fd;
+    int data_fd = args->_data_fd;
+
     CommandHandler* commandHandler = new CommandHandler(data_fd);
-    while (true) {
-        memset(buffer, 0, 1024);
-        bytes_received = recv(command_fd , buffer, 1024, 0);
-        if (bytes_received == 0) { // EOF
-            std::cout<<"Client "<< command_fd<< "Closed Connection\n";
-            close(command_fd);
-            close( data_fd);
-        }else{
-            message=std::string(buffer);
-            //Call command handler here
-            std::cout<<"User "<<command_fd<<" Said:"<<message<<std::endl;
+
+    char read_buffer[1024];
+    std::string send_buffer;
+    int client_in_len;
+    while (true)
+    {
+        memset(read_buffer, 0, 1024);
+        bzero(read_buffer, 1024);
+        if (recv(command_fd, read_buffer, sizeof(read_buffer), 0) > 0)
+        {
+            //send_buffer = commandHandler->runCommand(std::string(read_buffer));
+            std::cout << "SERVER received command " << std::string(read_buffer) << " from CLIENT (" << command_fd << ", " << data_fd << ")\n";
+            pthread_exit(NULL);
         }
-        //recv commands from channels and call commandHandler->runCommand()
+    
+        //ToDo: send send_buffer back to client (Also modify Client.cpp for receiving it)
     }
+
+    pthread_exit(NULL);
 }
 
 void Server::run() {
-    /*socket mocket stuff!
-    
-    while (true) {
-        accept connections from both channels (data and command)..
-
-        create new thread and handle connection..
-    }
-
-    join threads*/
-    int data_fd,command_fd,max_fd,new_client_fd, data_port=8080,command_port=8081,data_socket,command_socket;
-    fd_set master_set, working_set;
-    int bytes_received;
+    int data_fd, command_fd;
     char buffer[1024];
-    std::string message;
 
-    data_fd=setupServer(data_port);
-    command_fd=setupServer(command_port);
-    max_fd=std::max(command_fd,data_fd);
-    std::cout<<"server is ready"<<std::endl;
-
-    FD_SET(data_fd, &master_set);
-    FD_SET(command_fd, &master_set);
+    command_fd = setupServer(COMMAND_PORT);
+    data_fd = setupServer(DATA_PORT);
+    std::cout << "server is ready" << std::endl;
+    
+    pthread_t threads[MAX_THREADS];
+    int return_code;
+    int thread_cnt = 0;
 
     while (true)
     {
-        working_set = master_set;
-        select(max_fd + 1, &working_set, NULL, NULL, NULL);
-        for (int i = 0; i <= max_fd; i++) {
-            if(!FD_ISSET(i, &working_set))
-                continue;
-            if (i==data_fd) {    
-                data_socket = acceptClient(data_fd);
-                FD_SET(data_socket, &master_set);
-                std::cout<<"Client Connected to Data Port"<<std::endl;
-                if(data_socket>max_fd){
-                    max_fd=data_socket;
-                }
-            }
-            else if(i==command_fd){
-                command_socket = acceptClient(command_fd);
-                FD_SET(command_socket, &master_set);
-                std::cout<<"Client Connected to Command Port"<<std::endl;
-                if(command_socket>max_fd){
-                    max_fd=command_socket;
-                }
-                handleConnection(command_socket,data_socket);
-            }
-            else{
-                memset(buffer, 0, 1024);
-                bytes_received = recv(i , buffer, 1024, 0);
-                if (bytes_received == 0) { // EOF
-                    std::cout<<"Client "<< i<< "Closed Connection\n";
-                    close(i);
-                }else{
-                    message=std::string(buffer);
-                    //Call command handler here
-                    std::cout<<"User "<<i<<" Said:"<<message<<std::endl;
-                }
-            }
-        }
+        int command_fd_new = acceptClient(command_fd);
+        int data_fd_new = acceptClient(data_fd);
+
+        if (command_fd_new == -1 || data_fd_new == -1)
+            std::cout << "ERROR in accepting connection from client" << std::endl;
+        
+        struct arg_struct args;
+        args._tid = (int)thread_cnt;
+        args._command_fd = (int)command_fd_new;
+        args._data_fd = (int)data_fd_new;
+
+        
+        return_code = pthread_create(&threads[thread_cnt], NULL, &handleConnection, (void*)&args);
+        thread_cnt++;
+        
+        if (return_code)
+		{
+            std::cout << "ERROR; return code from pthread_create() is " << return_code << "\n";
+			exit(-1);
+		}
+    }
+    for (int tid = 0 ; tid < thread_cnt ; tid++)
+    {
+        return_code = pthread_join(threads[tid], NULL);
+		if (return_code)
+		{
+			printf("ERROR; return code from pthread_join() is %d\n", return_code);
+			exit(-1);
+		}
     }
 }
 
