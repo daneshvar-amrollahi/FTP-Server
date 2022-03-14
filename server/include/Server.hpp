@@ -27,8 +27,7 @@ class Server
 public:
     Server(const std::string& config_path);
     void run();
-    // void* handleConnection(void* arguments);
-
+    
     ConfigReader configReader;
     std::vector<std::string> private_files;
     std::vector<User*> users;

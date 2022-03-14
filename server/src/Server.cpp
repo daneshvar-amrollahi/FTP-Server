@@ -31,9 +31,7 @@ int acceptClient(int server_fd) {
     int client_fd;
     struct sockaddr_in client_address;
     int address_len = sizeof(client_address);
-    
     client_fd = accept(server_fd, (struct sockaddr *)&client_address, (socklen_t*) &address_len);
-
     return client_fd;
 }
 
@@ -106,7 +104,7 @@ void Server::run() {
         return_code = pthread_join(threads[tid], NULL);
 		if (return_code)
 		{
-			printf("ERROR; return code from pthread_join() is %d\n", return_code);
+			std::cout << "ERROR; return code from pthread_join() is "<< return_code << "\n";
 			exit(-1);
 		}
     }

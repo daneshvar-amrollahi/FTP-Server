@@ -16,11 +16,9 @@ public:
     CommandHandler(int data_fd, std::vector<User*> users);
     std::string runCommand(std::string input);
     int handleUser(std::string username);
-    //add similar methods for each command
 
 private:
     std::vector<std::string> getSplitted(const std::string& s);
-
     int data_fd;
     std::vector<User*> users; 
     Logger logger;

@@ -7,10 +7,10 @@ class User
 {
 public:
     User(
-        const std::string& username = "NULL",
-        const std::string& password = "NULL",
-        const int& download_capacity = 0,
-        const bool& admin = false
+        const std::string& username,
+        const std::string& password,
+        const int& download_capacity,
+        const bool& admin
     );
 
     
