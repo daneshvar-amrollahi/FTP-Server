@@ -33,7 +33,7 @@ std::string CommandHandler::runCommand(std::string input) {
         }
     }
     catch(Exception& e) {
-        return response.getMessage(e.getNumber());
+        return e.getError();
     }
     
    return "response"; //remove later
@@ -44,13 +44,17 @@ int CommandHandler::handleUser(std::string username)
     if (logged_in)
         throw Exception();
 
-    std::string logging_in_username;
+    bool found = false;
     for (User* user: users) {
          if (user->username == username)
          {
-             logging_in_username = user->username;
-             logging_in = true;
+            found = true;
+            logging_in_user = user;
+            logging_in = true;
          }
     }
+
+    if (!found)
+        throw InvalidUsernameOrPassword();
     return USERNAME_FOUND;
 }
