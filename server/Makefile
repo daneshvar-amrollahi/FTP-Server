@@ -14,7 +14,8 @@ OBJECTS = \
 	$(BUILD_DIR)/User.o 			\
 	$(BUILD_DIR)/CommandHandler.o	\
 	$(BUILD_DIR)/Logger.o			\
-	$(BUILD_DIR)/Exception.o 		
+	$(BUILD_DIR)/Exception.o 		\
+	$(BUILD_DIR)/Response.o
 	
 ResponseSensitivityList = \
 	$(SRC_DIR)/Response.cpp
@@ -34,16 +35,20 @@ ConfigReaderSensitivityList = \
 
 CommandHandlerSensitivityList = \
 	$(SRC_DIR)/CommandHandler.cpp \
-	$(INCLUDE_DIR)/Logger.hpp
+	$(INCLUDE_DIR)/Logger.hpp	\
+	$(INCLUDE_DIR)/User.hpp		\
+	$(INCLUDE_DIR)/Response.hpp	\
+	$(INCLUDE_DIR)/Exception.hpp
 
 ServerSensitivityList = \
 	$(SRC_DIR)/Server.cpp \
 	$(INCLUDE_DIR)/User.hpp \
-	$(INCLUDE_DIR)/ConfigReader.hpp
+	$(INCLUDE_DIR)/ConfigReader.hpp	\
+	$(INCLUDE_DIR)/CommandHandler.hpp
 
 MainSensitivityList = \
 	$(SRC_DIR)/main.cpp \
-	$(INCLUDE_DIR)/Server.hpp \
+	$(INCLUDE_DIR)/Server.hpp
 
 
 all: $(BUILD_DIR) $(EXECUTABLE_FILE)

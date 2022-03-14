@@ -14,14 +14,13 @@ void ConfigReader::readConfig() {
         std::string password = user["password"].get<std::string>();
         int download_capacity = stoi(user["size"].get<std::string>());
         bool admin = user["admin"].get<std::string>() == "true";
-        User curUser = User(username, password, download_capacity, admin);
-        users.push_back(curUser);
+        users.push_back(new User(username, password, download_capacity, admin));
     }
     for (auto& file: j["files"])
         private_files.push_back(file.get<std::string>());
 }
 
-std::vector<User> ConfigReader::getUsers()
+std::vector<User*> ConfigReader::getUsers()
 {
     return users;
 }

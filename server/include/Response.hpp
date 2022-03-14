@@ -3,7 +3,7 @@
 
 #include <string>
 
-#define USERNAME_OK 331
+#define USERNAME_FOUND 331
 //define other ones later
 
 class Response

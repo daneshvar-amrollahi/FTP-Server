@@ -17,12 +17,12 @@ class ConfigReader
 public:
     ConfigReader(const std::string& file_path);
     std::vector<std::string> getPrivateFiles();
-    std::vector<User> getUsers();
+    std::vector<User*> getUsers();
     
 private:
     std::string file_path;
     std::vector<std::string> private_files;
-    std::vector<User> users;
+    std::vector<User*> users;
     void readConfig();
 };
 

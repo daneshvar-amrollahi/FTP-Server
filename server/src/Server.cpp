@@ -1,12 +1,11 @@
 #include "Server.hpp"
-#include "CommandHandler.hpp"
 
 
-Server::Server(const std::string& config_path) 
-    : 
-    configReader(ConfigReader(config_path)),
-    private_files(configReader.getPrivateFiles()),
-    users(configReader.getUsers()) {
+Server::Server(const std::string& config_path) : 
+    configReader(ConfigReader(config_path))
+{
+    users = configReader.getUsers();
+    private_files = configReader.getPrivateFiles();
 }
 
 int setupServer(int port) {
@@ -39,18 +38,16 @@ int acceptClient(int server_fd) {
 }
 
 struct arg_struct {
-    int _tid;
     int _command_fd;
     int _data_fd;
-};
+}args;
+
+std::vector<User*> server_users;
 
 void* handleConnection(void* arguments) {
-    struct arg_struct *args = (struct arg_struct *)arguments;
-    int tid = args->_tid;
-    int command_fd = args->_command_fd;
-    int data_fd = args->_data_fd;
-
-    CommandHandler* commandHandler = new CommandHandler(data_fd);
+    int command_fd = args._command_fd;
+    int data_fd = args._data_fd;
+    CommandHandler* commandHandler = new CommandHandler(data_fd, server_users);
 
     char read_buffer[1024];
     std::string send_buffer;
@@ -58,13 +55,11 @@ void* handleConnection(void* arguments) {
     while (true)
     {
         memset(read_buffer, 0, 1024);
-        bzero(read_buffer, 1024);
         if (recv(command_fd, read_buffer, sizeof(read_buffer), 0) > 0)
         {
             std::cout << "SERVER received command " << std::string(read_buffer) << " from CLIENT (" << command_fd << ", " << data_fd << ")\n";
             send_buffer = commandHandler->runCommand(std::string(read_buffer));
-            // std::cout << "Response: " << send_buffer << "\n";
-            pthread_exit(NULL);
+            std::cout << "Response: " << send_buffer << "\n";
         }
     
         //ToDo: send send_buffer back to client (Also modify Client.cpp for receiving it)
@@ -85,6 +80,8 @@ void Server::run() {
     int return_code;
     int thread_cnt = 0;
 
+    server_users = users;
+
     while (true)
     {
         int command_fd_new = acceptClient(command_fd);
@@ -93,13 +90,9 @@ void Server::run() {
         if (command_fd_new == -1 || data_fd_new == -1)
             std::cout << "ERROR in accepting connection from client" << std::endl;
         
-        struct arg_struct args;
-        args._tid = (int)thread_cnt;
         args._command_fd = (int)command_fd_new;
         args._data_fd = (int)data_fd_new;
-
-        
-        return_code = pthread_create(&threads[thread_cnt], NULL, &handleConnection, (void*)&args);
+        return_code = pthread_create(&threads[thread_cnt], NULL, handleConnection, (void*)&args);
         thread_cnt++;
         
         if (return_code)

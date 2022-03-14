@@ -6,12 +6,11 @@
 class Exception
 {
 public:
-    virtual void printError();
     int getNumber();
 
 protected:
     std::string error = "";
-    int number;
+    int number = 500;
 };
 
 //introduce subclasses of exception for each error

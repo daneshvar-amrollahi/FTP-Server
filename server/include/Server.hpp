@@ -2,7 +2,7 @@
 #define __SERVER_H__
 
 #include <vector>
-#include <string>
+#include <string.h>
 #include <thread>
 #include <pthread.h>
 #include <sys/stat.h>
@@ -15,6 +15,7 @@
 
 #include "User.hpp"
 #include "ConfigReader.hpp"
+#include "CommandHandler.hpp"
 
 const int MAX_THREADS = 1024;
 const int COMMAND_PORT = 8080;
@@ -26,12 +27,11 @@ class Server
 public:
     Server(const std::string& config_path);
     void run();
-    void* handle_connection(void* command_fd, void* data_fd);
+    // void* handleConnection(void* arguments);
 
-private:
     ConfigReader configReader;
     std::vector<std::string> private_files;
-    std::vector<User> users;
+    std::vector<User*> users;
 };
 
 #endif
