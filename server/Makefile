@@ -34,16 +34,16 @@ ConfigReaderSensitivityList = \
 	$(INCLUDE_DIR)/User.hpp
 
 CommandHandlerSensitivityList = \
-	$(SRC_DIR)/CommandHandler.cpp \
-	$(INCLUDE_DIR)/Logger.hpp	\
-	$(INCLUDE_DIR)/User.hpp		\
-	$(INCLUDE_DIR)/Response.hpp	\
+	$(SRC_DIR)/CommandHandler.cpp 	\
+	$(INCLUDE_DIR)/Logger.hpp		\
+	$(INCLUDE_DIR)/User.hpp			\
+	$(INCLUDE_DIR)/Response.hpp		\
 	$(INCLUDE_DIR)/Exception.hpp
 
 ServerSensitivityList = \
-	$(SRC_DIR)/Server.cpp \
-	$(INCLUDE_DIR)/User.hpp \
-	$(INCLUDE_DIR)/ConfigReader.hpp	\
+	$(SRC_DIR)/Server.cpp 				\
+	$(INCLUDE_DIR)/User.hpp 			\
+	$(INCLUDE_DIR)/ConfigReader.hpp		\
 	$(INCLUDE_DIR)/CommandHandler.hpp
 
 MainSensitivityList = \
