@@ -29,12 +29,14 @@ std::string CommandHandler::runCommand(std::string input) {
     Response response;
     try
     {
-        logger.writeMessage("Server Received COMMAND: " + command);
         if (command == "user"){
             return response.getMessage(handleUser(args[0]));
         } else
         if (command == "pass"){
             return response.getMessage(handlePass(args[0]));
+        } else
+        if (command == "pwd") {
+            return response.getMessage(PWD_OK, handlePWD(args));
         } else
         {
             throw SyntaxErrorInParamsOrArgs();
@@ -80,4 +82,29 @@ int CommandHandler::handlePass(std::string password) {
         return USER_LOGGED_IN;
     }
     throw InvalidUsernameOrPassword();
+}
+
+//stackoverflow
+std::string CommandHandler::execShellCommand(const char *command, std::vector<std::string> args) {
+    char tmpname [L_tmpnam];
+    std::tmpnam ( tmpname );
+    std::string scommand = command;
+    scommand += " ";
+    for(std::string arg : args)
+        scommand += arg + " ";
+    std::string cmd = scommand + " >> " + tmpname;
+    std::system(cmd.c_str());
+    std::ifstream file(tmpname, std::ios::in | std::ios::binary );
+    std::string result;
+    if (file) {
+        while (!file.eof()) 
+            result.push_back(file.get());
+        file.close();
+    }
+    remove(tmpname);
+    return result.substr(0, result.size() - 2);
+}
+
+std::string CommandHandler::handlePWD(std::vector<std::string> args) { //args will be empty
+    return execShellCommand("pwd", args);
 }

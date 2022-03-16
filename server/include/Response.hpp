@@ -3,13 +3,15 @@
 
 #include <string>
 
-#define USERNAME_FOUND  331
-#define USER_LOGGED_IN  230
+const int USERNAME_FOUND    =  331;
+const int USER_LOGGED_IN    =  230;
+const int PWD_OK            =  257;
 
 class Response
 {
 public:
-    std::string getMessage(int num);
+    std::string getMessage(int code);
+    std::string getMessage(int code, std::string response);
 };
 
 #endif

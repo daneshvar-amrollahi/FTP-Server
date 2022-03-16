@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <unistd.h>
 
 #include "Logger.hpp"
 #include "User.hpp"
@@ -17,6 +18,9 @@ public:
     std::string runCommand(std::string input);
     int handleUser(std::string username);
     int handlePass(std::string password);
+    std::string handlePWD(std::vector<std::string> args);
+    std::string execShellCommand(const char *command, std::vector<std::string> args);
+
 
 private:
     std::vector<std::string> getSplitted(const std::string& s);
