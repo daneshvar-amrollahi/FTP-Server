@@ -16,6 +16,7 @@ public:
     CommandHandler(int data_fd, std::vector<User*> users);
     std::string runCommand(std::string input);
     int handleUser(std::string username);
+    int handlePass(std::string password);
 
 private:
     std::vector<std::string> getSplitted(const std::string& s);

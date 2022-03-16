@@ -30,6 +30,9 @@ std::string CommandHandler::runCommand(std::string input) {
         logger.writeMessage("Server Received COMMAND: " + command);
         if (command == "user"){
             return response.getMessage(handleUser(args[0]));
+        } else
+        if (command == "pass"){
+            return response.getMessage(handlePass(args[0]));
         }
         else
         {
@@ -59,4 +62,18 @@ int CommandHandler::handleUser(std::string username)
     if (!found)
         throw InvalidUsernameOrPassword();
     return USERNAME_FOUND;
+}
+
+int CommandHandler::handlePass(std::string password) {
+    if (!logging_in)
+        throw BadSequenceOfCommands();
+    
+    if (logging_in_user->password == password)
+    {
+        logging_in = false;
+        logged_in = true;
+        current_user = logging_in_user;
+        return USER_LOGGED_IN;
+    }
+    throw InvalidUsernameOrPassword();
 }

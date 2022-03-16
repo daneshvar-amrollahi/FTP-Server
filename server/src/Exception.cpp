@@ -5,28 +5,17 @@ std::string Exception::getError()
     return message;
 }
 
-int Exception::getCode()
-{
-    return number;
-}
-
-
-int InvalidUsernameOrPassword::getCode()
-{
-    return code;
-}
-
 std::string InvalidUsernameOrPassword::getError()
 {
     return error;
 }
 
-int SyntaxErrorInParamsOrArgs::getCode()
+std::string SyntaxErrorInParamsOrArgs::getError()
 {
-    return code;
+    return error;
 }
 
-std::string SyntaxErrorInParamsOrArgs::getError()
+std::string BadSequenceOfCommands::getError()
 {
     return error;
 }

@@ -3,7 +3,8 @@
 
 #include <string>
 
-#define USERNAME_FOUND 331
+#define USERNAME_FOUND  331
+#define USER_LOGGED_IN  230
 
 class Response
 {
