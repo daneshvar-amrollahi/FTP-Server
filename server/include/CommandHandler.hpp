@@ -27,6 +27,7 @@ private:
     bool logged_in;
     bool logging_in;
     User* logging_in_user;
+    bool is_admin;
 };
 
 #endif

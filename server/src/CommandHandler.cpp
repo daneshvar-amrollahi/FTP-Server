@@ -3,6 +3,8 @@
 CommandHandler::CommandHandler(int data_fd, std::vector<User*> users) : data_fd(data_fd), users(users) {
     current_user = NULL;
     logged_in = false;
+    logging_in = false;
+    is_admin = false;
 }
 
 std::vector<std::string> CommandHandler::getSplitted(const std::string& s) {
@@ -33,8 +35,7 @@ std::string CommandHandler::runCommand(std::string input) {
         } else
         if (command == "pass"){
             return response.getMessage(handlePass(args[0]));
-        }
-        else
+        } else
         {
             throw SyntaxErrorInParamsOrArgs();
         }
@@ -56,6 +57,7 @@ int CommandHandler::handleUser(std::string username)
             found = true;
             logging_in_user = user;
             logging_in = true;
+            is_admin = user->admin;
          }
     }
 
@@ -73,6 +75,8 @@ int CommandHandler::handlePass(std::string password) {
         logging_in = false;
         logged_in = true;
         current_user = logging_in_user;
+        if (logging_in_user->admin)
+            is_admin = true;
         return USER_LOGGED_IN;
     }
     throw InvalidUsernameOrPassword();
