@@ -55,12 +55,13 @@ void* handleConnection(void* arguments) {
         memset(read_buffer, 0, 1024);
         if (recv(command_fd, read_buffer, sizeof(read_buffer), 0) > 0)
         {
-            std::cout << "SERVER received command " << std::string(read_buffer) << " from CLIENT (" << command_fd << ", " << data_fd << ")\n";
+            // std::cout << "SERVER received command " << std::string(read_buffer) << " from CLIENT (" << command_fd << ", " << data_fd << ")\n";
             send_buffer = commandHandler->runCommand(std::string(read_buffer));
-            std::cout << "Response: " << send_buffer << "\n";
         }
-    
-        //ToDo: send send_buffer back to client (Also modify Client.cpp for receiving it)
+        
+        if (send(command_fd, send_buffer.c_str(), sizeof(read_buffer), 0) == -1) {
+            std::cout << "ERROR on sending command result back to client\n";
+        }
     }
 
     pthread_exit(NULL);

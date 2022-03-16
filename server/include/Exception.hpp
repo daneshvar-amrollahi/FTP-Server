@@ -6,18 +6,36 @@
 class Exception
 {
 public:
-    int getNumber();
-    std::string getError();
-protected:
-    std::string error = "500: Error";
-    int number = 500;
+    virtual std::string getError();
+    virtual int getCode();
+
+private:
+    const std::string message = "500: Error";
+    const int number = 500;
 };
 
 class InvalidUsernameOrPassword : public Exception
 {
+public:
+    virtual std::string getError();
+    virtual int getCode();
+
 private:
-    std::string error = "430: Invalid username or password";
-    int number = 430;
+    const std::string error = "430: Invalid username or password";
+    const int code = 430;
 };
+
+class SyntaxErrorInParamsOrArgs : public Exception
+{
+public:
+    virtual std::string getError();
+    virtual int getCode();
+
+private:
+    const std::string error = "501: Syntax error in parameters or arguments";
+    const int code = 430;
+};
+
+
 
 #endif

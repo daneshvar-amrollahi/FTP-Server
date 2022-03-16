@@ -36,10 +36,12 @@ void Client::run() {
     int command_fd,data_fd;
     command_fd = connectServer(8080);
     data_fd = connectServer(8081);
-    std::cout << "CLIENT connected: " << command_fd << " " << data_fd << std::endl;
-    while(true){
-        std::getline(std::cin, command);
+    // std::cout << "CLIENT connected: " << command_fd << " " << data_fd << std::endl;
+    char read_buffer[1024];
+    while(std::getline(std::cin, command)){
         send(command_fd, command.c_str(), command.size(), 0);
+        recv(command_fd, read_buffer, sizeof(read_buffer), 0);
+        std::cout << read_buffer << std::endl;
     }
     
 }

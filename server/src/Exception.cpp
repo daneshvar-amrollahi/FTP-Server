@@ -1,11 +1,32 @@
 #include "Exception.hpp"
 
-int Exception::getNumber()
+std::string Exception::getError()
+{
+    return message;
+}
+
+int Exception::getCode()
 {
     return number;
 }
 
-std::string Exception::getError()
+
+int InvalidUsernameOrPassword::getCode()
+{
+    return code;
+}
+
+std::string InvalidUsernameOrPassword::getError()
+{
+    return error;
+}
+
+int SyntaxErrorInParamsOrArgs::getCode()
+{
+    return code;
+}
+
+std::string SyntaxErrorInParamsOrArgs::getError()
 {
     return error;
 }

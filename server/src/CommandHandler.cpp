@@ -31,12 +31,14 @@ std::string CommandHandler::runCommand(std::string input) {
         if (command == "user"){
             return response.getMessage(handleUser(args[0]));
         }
+        else
+        {
+            throw SyntaxErrorInParamsOrArgs();
+        }
     }
     catch(Exception& e) {
         return e.getError();
     }
-    
-   return "response"; //remove later
 }
 
 int CommandHandler::handleUser(std::string username)
