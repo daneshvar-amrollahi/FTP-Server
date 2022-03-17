@@ -8,6 +8,7 @@ const int USER_LOGGED_IN    =  230;
 const int PWD_OK            =  257;
 const int MKD_OK            =  258;
 const int DELE_OK           =  250;
+const int LS_OK             =  226;
 
 class Response
 {

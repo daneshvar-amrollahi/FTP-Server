@@ -8,6 +8,8 @@ std::string Response::getMessage(int code) {
         return "331: User name okay, need password.";
     if (code == USER_LOGGED_IN)
         return "230: User logged in, proceed. Logged out if appropriate.";
+    if (code == LS_OK)
+        return "226: List transfer done.";
     return "response";
 }
 

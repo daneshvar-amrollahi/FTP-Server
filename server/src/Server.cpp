@@ -43,6 +43,35 @@ struct arg_struct {
 std::vector<User*> server_users;
 std::vector<std::string> server_private_files;
 
+std::string getCommandChMessage(std::string message) {
+    std::string result = "";
+    for (int i = 0; i < message.size(); i++)
+    {
+        if (message[i] == ';')
+            return result;
+        result += message[i];
+    }
+    return result;
+}
+
+std::string getDataChMessage(std::string message) {
+    int i = 0;
+    while (message[i] != ';')
+        i++;
+    i++;
+    std::string result = "";
+    for (i; i < message.size(); i++)
+        result += message[i];
+    return result;
+}
+
+bool needsDataChannel(std::string message) {
+    for (int i = 0; i < message.size(); i++)
+        if (message[i] == ';')
+            return true;
+    return false;
+}
+
 void* handleConnection(void* arguments) {
     int command_fd = args._command_fd;
     int data_fd = args._data_fd;
@@ -55,14 +84,26 @@ void* handleConnection(void* arguments) {
     {
         memset(read_buffer, 0, 1024);
         if (recv(command_fd, read_buffer, sizeof(read_buffer), 0) > 0)
-        {
-            // std::cout << "SERVER received command " << std::string(read_buffer) << " from CLIENT (" << command_fd << ", " << data_fd << ")\n";
             send_buffer = commandHandler->runCommand(std::string(read_buffer));
+
+        if (!needsDataChannel(send_buffer))
+        {
+            if (send(command_fd, send_buffer.c_str(), sizeof(read_buffer), 0) == -1)
+                std::cout << "ERROR on sending command result back to client\n";
+        }
+        else
+        {
+            std::string dataChMessage = getDataChMessage(send_buffer);
+            std::string commandChMessage = getCommandChMessage(send_buffer);
+
+            if (send(command_fd, commandChMessage.c_str(), sizeof(read_buffer), 0) == -1)
+                std::cout << "ERROR on sending command result back to client\n";
+
+            if (send(data_fd, dataChMessage.c_str(), sizeof(read_buffer), 0) == -1)
+                std::cout << "ERROR on sending command result back to client\n";
         }
         
-        if (send(command_fd, send_buffer.c_str(), sizeof(read_buffer), 0) == -1) {
-            std::cout << "ERROR on sending command result back to client\n";
-        }
+        
     }
 
     pthread_exit(NULL);
@@ -74,7 +115,6 @@ void Server::run() {
 
     command_fd = setupServer(COMMAND_PORT);
     data_fd = setupServer(DATA_PORT);
-    std::cout << "server is ready" << std::endl;
     
     pthread_t threads[MAX_THREADS];
     int return_code;

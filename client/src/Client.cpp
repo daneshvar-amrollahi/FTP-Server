@@ -27,8 +27,14 @@ int connectServer(int port)
         std::cout<<"Error in connecting to server\n";
         return -1;
     }
-    std::cout<<"Connected to Server at Port "<<port<<std::endl;
     return fd;
+}
+
+bool needsDataChannel(std::string command) //may need to be completed later
+{
+    if (command.substr(0, 2) == "ls")
+        return true;
+    return false;
 }
 
 void Client::run() {
@@ -40,8 +46,14 @@ void Client::run() {
     char read_buffer[1024];
     while(std::getline(std::cin, command)){
         send(command_fd, command.c_str(), command.size(), 0);
+
         recv(command_fd, read_buffer, sizeof(read_buffer), 0);
         std::cout << read_buffer << std::endl;
+
+        if (needsDataChannel(command)) {
+            recv(data_fd, read_buffer, sizeof(read_buffer), 0);
+            std::cout << read_buffer << std::endl;
+        }
     }
     
 }

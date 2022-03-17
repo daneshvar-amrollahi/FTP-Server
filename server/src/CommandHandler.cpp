@@ -46,6 +46,9 @@ std::string CommandHandler::runCommand(std::string input) {
         } else
         if (command == "dele") {
             return response.getMessage(DELE_OK, handleDele(args));
+        } else
+        if (command == "ls") {
+            return response.getMessage(LS_OK) + ";" + handleLs(args);
         }
         else
             throw SyntaxErrorInParamsOrArgs();
@@ -176,4 +179,14 @@ std::string CommandHandler::handleDele(std::vector<std::string> args) {
     return args[0];
 
     throw SyntaxErrorInParamsOrArgs();
+}
+
+std::string CommandHandler::handleLs(std::vector<std::string> args) {
+    if (!logged_in)
+        throw NotLoggedIn();
+    try {
+        return execShellCommand("ls", args); 
+    } catch(...) {
+        throw Exception();
+    }
 }
