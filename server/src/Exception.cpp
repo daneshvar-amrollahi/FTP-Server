@@ -24,3 +24,8 @@ std::string NotLoggedIn::getError()
 {
     return error;
 }
+
+std::string FileUnavailable::getError()
+{
+    return error;
+}

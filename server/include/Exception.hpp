@@ -48,5 +48,13 @@ class NotLoggedIn : public Exception
         const std::string error = "332: Need account for login.";
 };
 
+class FileUnavailable : public Exception
+{
+    public:
+        virtual std::string getError();
+    
+    private:
+        const std::string error = "550: File unavailable.";
+};
 
 #endif

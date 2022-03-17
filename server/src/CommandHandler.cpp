@@ -1,6 +1,9 @@
 #include "CommandHandler.hpp"
 
-CommandHandler::CommandHandler(int data_fd, std::vector<User*> users) : data_fd(data_fd), users(users) {
+CommandHandler::CommandHandler(int data_fd, std::vector<User*> users, std::vector<std::string> private_files) 
+    : data_fd(data_fd), 
+    users(users), 
+    private_files(private_files) {
     current_user = NULL;
     logged_in = false;
     logging_in = false;
@@ -40,7 +43,10 @@ std::string CommandHandler::runCommand(std::string input) {
         } else
         if (command == "mkd") {
             return response.getMessage(MKD_OK, handleMkd(args));
-        } 
+        } else
+        if (command == "dele") {
+            return response.getMessage(DELE_OK, handleDele(args));
+        }
         else
             throw SyntaxErrorInParamsOrArgs();
         
@@ -111,12 +117,63 @@ std::string CommandHandler::execShellCommand(const char *command, std::vector<st
 std::string CommandHandler::handlePwd(std::vector<std::string> args) { //args will be empty
     if (!logged_in)
         throw NotLoggedIn();
-    return execShellCommand("pwd", args);
+    try {
+        return execShellCommand("pwd", args);
+    } catch(...) {
+        throw Exception();
+    }
 }
 
 std::string CommandHandler::handleMkd(std::vector<std::string> args) {
     if (!logged_in)
         throw NotLoggedIn();
-    execShellCommand("mkdir", args);
+    try {
+        execShellCommand("mkdir", args);
+    } catch (...) {
+        throw Exception();
+    }
     return args[0];
+}
+
+bool CommandHandler::isPrivateFile(std::string file_name) {
+    for (std::string file: private_files)
+        if (file == file_name)
+            return true;
+    return false;
+}
+
+std::string CommandHandler::handleDele(std::vector<std::string> args) {
+    if (!logged_in)
+        throw NotLoggedIn();
+    std::string file_name = args[1];
+    if (isPrivateFile(file_name) && !current_user->admin)
+        throw FileUnavailable();
+    if (args.size() < 2)
+        throw SyntaxErrorInParamsOrArgs();
+
+    if (args[0] == "-f")
+    {
+        args.erase(args.begin()); //remove -f/-d
+        try {
+            execShellCommand("rm", args);
+        } 
+        catch (...){ 
+            throw Exception();
+        }
+    }
+
+    if (args[0] == "-d")
+    {
+        args.erase(args.begin()); //remove -f/-d
+        try {
+            execShellCommand("rm -r", args);
+        }
+        catch (...){
+            throw Exception();
+        }
+    }
+
+    return args[0];
+
+    throw SyntaxErrorInParamsOrArgs();
 }

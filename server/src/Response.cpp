@@ -16,6 +16,8 @@ std::string Response::getMessage(int code, std::string response) {
         return "257: " + response;
     if (code == MKD_OK)
         return "257: " + response + " created.";
+    if (code == DELE_OK)
+        return "250: " + response + " deleted.";
     return "response";
 }
 

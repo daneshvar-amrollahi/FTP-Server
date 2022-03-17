@@ -41,11 +41,12 @@ struct arg_struct {
 }args;
 
 std::vector<User*> server_users;
+std::vector<std::string> server_private_files;
 
 void* handleConnection(void* arguments) {
     int command_fd = args._command_fd;
     int data_fd = args._data_fd;
-    CommandHandler* commandHandler = new CommandHandler(data_fd, server_users);
+    CommandHandler* commandHandler = new CommandHandler(data_fd, server_users, server_private_files);
 
     char read_buffer[1024];
     std::string send_buffer;
@@ -80,6 +81,7 @@ void Server::run() {
     int thread_cnt = 0;
 
     server_users = users;
+    server_private_files = private_files;
 
     while (true)
     {
