@@ -19,3 +19,8 @@ std::string BadSequenceOfCommands::getError()
 {
     return error;
 }
+
+std::string NotLoggedIn::getError()
+{
+    return error;
+}

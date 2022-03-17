@@ -14,6 +14,8 @@ std::string Response::getMessage(int code) {
 std::string Response::getMessage(int code, std::string response) {
     if (code == PWD_OK)
         return "257: " + response;
+    if (code == MKD_OK)
+        return "257: " + response + " created.";
     return "response";
 }
 

@@ -36,11 +36,14 @@ std::string CommandHandler::runCommand(std::string input) {
             return response.getMessage(handlePass(args[0]));
         } else
         if (command == "pwd") {
-            return response.getMessage(PWD_OK, handlePWD(args));
+            return response.getMessage(PWD_OK, handlePwd(args));
         } else
-        {
+        if (command == "mkd") {
+            return response.getMessage(MKD_OK, handleMkd(args));
+        } 
+        else
             throw SyntaxErrorInParamsOrArgs();
-        }
+        
     }
     catch(Exception& e) {
         return e.getError();
@@ -105,6 +108,15 @@ std::string CommandHandler::execShellCommand(const char *command, std::vector<st
     return result.substr(0, result.size() - 2);
 }
 
-std::string CommandHandler::handlePWD(std::vector<std::string> args) { //args will be empty
+std::string CommandHandler::handlePwd(std::vector<std::string> args) { //args will be empty
+    if (!logged_in)
+        throw NotLoggedIn();
     return execShellCommand("pwd", args);
+}
+
+std::string CommandHandler::handleMkd(std::vector<std::string> args) {
+    if (!logged_in)
+        throw NotLoggedIn();
+    execShellCommand("mkdir", args);
+    return args[0];
 }

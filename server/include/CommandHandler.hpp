@@ -18,7 +18,8 @@ public:
     std::string runCommand(std::string input);
     int handleUser(std::string username);
     int handlePass(std::string password);
-    std::string handlePWD(std::vector<std::string> args);
+    std::string handlePwd(std::vector<std::string> args);
+    std::string handleMkd(std::vector<std::string> args);
     std::string execShellCommand(const char *command, std::vector<std::string> args);
 
 
