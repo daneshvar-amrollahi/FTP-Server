@@ -10,6 +10,10 @@ std::string Response::getMessage(int code) {
         return "230: User logged in, proceed. Logged out if appropriate.";
     if (code == LS_OK)
         return "226: List transfer done.";
+    if (code == HELP_OK)
+        return HELP_MESSAGE;
+    if (code == RENAME_OK)
+        return "250: Successful change";
     return "response";
 }
 

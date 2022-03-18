@@ -24,6 +24,10 @@ public:
     std::string handleDele(std::vector<std::string> args);
     bool isPrivateFile(std::string file_name);
     std::string handleLs(std::vector<std::string> args);
+    std::string handleCwd(std::vector<std::string> args);
+    std::string handleRename(std::vector<std::string> args);
+    std::string handleRetr(std::vector<std::string> args);
+    std::string handleQuit(std::vector<std::string> args);
     std::string execShellCommand(const char *command, std::vector<std::string> args);
 
 

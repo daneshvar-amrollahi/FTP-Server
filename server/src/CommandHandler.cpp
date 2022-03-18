@@ -49,6 +49,25 @@ std::string CommandHandler::runCommand(std::string input) {
         } else
         if (command == "ls") {
             return response.getMessage(LS_OK) + ";" + handleLs(args);
+        } else
+        if (command == "cwd") {
+            return response.getMessage(CWD_OK) + ";" + handleCwd(args);
+        }
+        else
+        if (command == "rename") {
+            return response.getMessage(RENAME_OK) + ";" + handleRename(args);
+        }
+        else
+        if (command == "retr") {
+            return response.getMessage(LS_OK) + ";" + handleRetr(args);
+        }
+        else
+        if (command == "help") {
+            return response.getMessage(HELP_OK);
+        }
+        else
+        if (command == "quit") {
+            return response.getMessage(LS_OK) + ";" + handleQuit(args);
         }
         else
             throw SyntaxErrorInParamsOrArgs();
@@ -186,6 +205,46 @@ std::string CommandHandler::handleLs(std::vector<std::string> args) {
         throw NotLoggedIn();
     try {
         return execShellCommand("ls", args); 
+    } catch(...) {
+        throw Exception();
+    }
+}
+
+std::string CommandHandler::handleCwd(std::vector<std::string> args) {
+    if (!logged_in)
+        throw NotLoggedIn();
+    try {
+        return execShellCommand("cd", args); 
+    } catch(...) {
+        throw Exception();
+    }
+}
+
+std::string CommandHandler::handleRename(std::vector<std::string> args) {
+    if (!logged_in)
+        throw NotLoggedIn();
+    try {
+        return execShellCommand("mv", args); 
+    } catch(...) {
+        throw Exception();
+    }
+}
+
+std::string CommandHandler::handleRetr(std::vector<std::string> args) {
+    if (!logged_in)
+        throw NotLoggedIn();
+    try {
+        return execShellCommand("mv", args); 
+    } catch(...) {
+        throw Exception();
+    }
+}
+
+std::string CommandHandler::handleQuit(std::vector<std::string> args) {
+    if (!logged_in)
+        throw NotLoggedIn();
+    try {
+        return execShellCommand("mv", args); 
     } catch(...) {
         throw Exception();
     }
