@@ -55,7 +55,7 @@ std::string CommandHandler::runCommand(std::string input) {
         }
         else
         if (command == "rename") {
-            return response.getMessage(RENAME_OK) + ";" + handleRename(args);
+            return response.getMessage(handleRename(args));
         }
         else
         if (command == "retr") {
@@ -220,14 +220,15 @@ std::string CommandHandler::handleCwd(std::vector<std::string> args) {
     }
 }
 
-std::string CommandHandler::handleRename(std::vector<std::string> args) {
+int CommandHandler::handleRename(std::vector<std::string> args) {
     if (!logged_in)
         throw NotLoggedIn();
     try {
-        return execShellCommand("mv", args); 
+        execShellCommand("mv", args); 
     } catch(...) {
         throw Exception();
     }
+    return RENAME_OK;
 }
 
 std::string CommandHandler::handleRetr(std::vector<std::string> args) {
