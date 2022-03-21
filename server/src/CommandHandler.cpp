@@ -242,6 +242,16 @@ int CommandHandler::handleRename(std::vector<std::string> args) {
     return RENAME_OK;
 }
 
+int CommandHandler::getFileSize(std::string file_name) {
+    FILE* fp = fopen((current_directory + "/" + file_name).c_str(), "r");
+    if (fp == NULL) //file not found
+        throw FileUnavailable();
+    fseek(fp, 0L, SEEK_END);
+    long int file_size = ftell(fp);
+    fclose(fp);
+    return file_size;
+}
+
 std::string CommandHandler::handleRetr(std::vector<std::string> args) {
     if (!logged_in)
         throw NotLoggedIn();
@@ -249,9 +259,10 @@ std::string CommandHandler::handleRetr(std::vector<std::string> args) {
         std::string file_name = args[0];
         if (isPrivateFile(file_name) && !current_user->admin)
             throw FileUnavailable();
-
-        
-
+        int file_size = getFileSize(file_name);
+        if (file_size > current_user->download_capacity)
+            throw NotEnoughDownloadCapacity();
+        current_user->download_capacity = current_user->download_capacity - file_size;
         return execShellCommand(("cd " + current_directory + " && cat ").c_str(), args); 
     } catch(...) {
         throw Exception();

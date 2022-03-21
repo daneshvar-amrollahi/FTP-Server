@@ -57,4 +57,13 @@ class FileUnavailable : public Exception
         const std::string error = "550: File unavailable.";
 };
 
+class NotEnoughDownloadCapacity : public Exception
+{
+    public:
+        virtual std::string getError();
+
+    private:
+        const std::string error = "425: Can't open data connection.";
+};
+
 #endif

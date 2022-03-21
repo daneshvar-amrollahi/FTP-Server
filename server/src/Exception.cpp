@@ -29,3 +29,8 @@ std::string FileUnavailable::getError()
 {
     return error;
 }
+
+std::string NotEnoughDownloadCapacity::getError()
+{
+    return error;
+}
