@@ -18,6 +18,8 @@ void ConfigReader::readConfig() {
     }
     for (auto& file: j["files"])
         private_files.push_back(file.get<std::string>());
+    commandChannelPort = j["commandChannelPort"];
+    dataChannelPort = j["dataChannelPort"];
 }
 
 std::vector<User*> ConfigReader::getUsers()
@@ -30,3 +32,12 @@ std::vector<std::string> ConfigReader::getPrivateFiles()
     return private_files;
 }
 
+int ConfigReader::getCommandChannelPort()
+{
+    return commandChannelPort;
+}
+
+int ConfigReader::getDataChannelPort()
+{
+    return dataChannelPort;
+}

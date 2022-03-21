@@ -113,8 +113,8 @@ void Server::run() {
     int data_fd, command_fd;
     char buffer[1024];
 
-    command_fd = setupServer(COMMAND_PORT);
-    data_fd = setupServer(DATA_PORT);
+    command_fd = setupServer(configReader.getCommandChannelPort());
+    data_fd = setupServer(configReader.getDataChannelPort());
     
     pthread_t threads[MAX_THREADS];
     int return_code;
