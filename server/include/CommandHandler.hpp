@@ -24,7 +24,7 @@ public:
     std::string handleDele(std::vector<std::string> args);
     bool isPrivateFile(std::string file_name);
     std::string handleLs(std::vector<std::string> args);
-    std::string handleCwd(std::vector<std::string> args);
+    int handleCwd(std::vector<std::string> args);
     int handleRename(std::vector<std::string> args);
     std::string handleRetr(std::vector<std::string> args);
     std::string handleQuit(std::vector<std::string> args);
@@ -42,6 +42,7 @@ private:
     bool logging_in;
     User* logging_in_user;
     bool is_admin;
+    std::string current_directory;
 };
 
 #endif

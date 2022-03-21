@@ -8,6 +8,7 @@ CommandHandler::CommandHandler(int data_fd, std::vector<User*> users, std::vecto
     logged_in = false;
     logging_in = false;
     is_admin = false;
+    current_directory = execShellCommand("pwd", std::vector<std::string> {});
 }
 
 std::vector<std::string> CommandHandler::getSplitted(const std::string& s) {
@@ -51,7 +52,7 @@ std::string CommandHandler::runCommand(std::string input) {
             return response.getMessage(LS_OK) + ";" + handleLs(args);
         } else
         if (command == "cwd") {
-            return response.getMessage(CWD_OK) + ";" + handleCwd(args);
+            return response.getMessage(handleCwd(args));
         }
         else
         if (command == "rename") {
@@ -117,12 +118,16 @@ int CommandHandler::handlePass(std::string password) {
 
 //stackoverflow
 std::string CommandHandler::execShellCommand(const char *command, std::vector<std::string> args) {
+    
     char tmpname [L_tmpnam];
     std::tmpnam ( tmpname );
     std::string scommand = command;
     scommand += " ";
     for(std::string arg : args)
         scommand += arg + " ";
+
+    // std::cout << "executing " << scommand << "\n";
+
     std::string cmd = scommand + " >> " + tmpname;
     std::system(cmd.c_str());
     std::ifstream file(tmpname, std::ios::in | std::ios::binary );
@@ -140,7 +145,7 @@ std::string CommandHandler::handlePwd(std::vector<std::string> args) { //args wi
     if (!logged_in)
         throw NotLoggedIn();
     try {
-        return execShellCommand("pwd", args);
+        return current_directory;
     } catch(...) {
         throw Exception();
     }
@@ -150,7 +155,7 @@ std::string CommandHandler::handleMkd(std::vector<std::string> args) {
     if (!logged_in)
         throw NotLoggedIn();
     try {
-        execShellCommand("mkdir", args);
+        execShellCommand(("cd " + current_directory + " && mkdir").c_str(), args);
     } catch (...) {
         throw Exception();
     }
@@ -177,7 +182,7 @@ std::string CommandHandler::handleDele(std::vector<std::string> args) {
     {
         args.erase(args.begin()); //remove -f/-d
         try {
-            execShellCommand("rm", args);
+            execShellCommand(("cd " + current_directory + " && rm").c_str(), args);
         } 
         catch (...){ 
             throw Exception();
@@ -188,7 +193,7 @@ std::string CommandHandler::handleDele(std::vector<std::string> args) {
     {
         args.erase(args.begin()); //remove -f/-d
         try {
-            execShellCommand("rm -r", args);
+            execShellCommand(("cd " + current_directory + " && rm -r").c_str(), args);
         }
         catch (...){
             throw Exception();
@@ -204,20 +209,26 @@ std::string CommandHandler::handleLs(std::vector<std::string> args) {
     if (!logged_in)
         throw NotLoggedIn();
     try {
-        return execShellCommand("ls", args); 
+        return execShellCommand(("cd " + current_directory + " && ls ").c_str(), args); 
     } catch(...) {
         throw Exception();
     }
 }
 
-std::string CommandHandler::handleCwd(std::vector<std::string> args) {
+int CommandHandler::handleCwd(std::vector<std::string> args) {
     if (!logged_in)
         throw NotLoggedIn();
     try {
-        return execShellCommand("cd", args); 
+        args[0] = current_directory + "/" + args[0];
+        args.push_back("&&");
+        args.push_back("pwd");
+        current_directory = execShellCommand("cd", args); 
+        // current_directory = execShellCommand("pwd", std::vector<std::string> {});
+        // std::cout << "current_dir = " << current_directory << "\n";
     } catch(...) {
         throw Exception();
     }
+    return CWD_OK;
 }
 
 int CommandHandler::handleRename(std::vector<std::string> args) {
