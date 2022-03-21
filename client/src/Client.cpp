@@ -32,9 +32,7 @@ int connectServer(int port)
 
 bool needsDataChannel(std::string command) //may need to be completed later
 {
-    if (command.substr(0, 2) == "ls")
-        return true;
-    return false;
+    return (command.substr(0, 2) == "ls") || (command.substr(0, 4) == "retr");
 }
 
 void Client::run() {

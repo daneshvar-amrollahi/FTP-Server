@@ -60,7 +60,7 @@ std::string CommandHandler::runCommand(std::string input) {
         }
         else
         if (command == "retr") {
-            return response.getMessage(LS_OK) + ";" + handleRetr(args);
+            return response.getMessage(RETR_OK) + ";" + handleRetr(args);
         }
         else
         if (command == "help") {
@@ -246,7 +246,13 @@ std::string CommandHandler::handleRetr(std::vector<std::string> args) {
     if (!logged_in)
         throw NotLoggedIn();
     try {
-        return execShellCommand("mv", args); 
+        std::string file_name = args[0];
+        if (isPrivateFile(file_name) && !current_user->admin)
+            throw FileUnavailable();
+
+        
+
+        return execShellCommand(("cd " + current_directory + " && cat ").c_str(), args); 
     } catch(...) {
         throw Exception();
     }
