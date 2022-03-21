@@ -235,6 +235,8 @@ int CommandHandler::handleRename(std::vector<std::string> args) {
     if (!logged_in)
         throw NotLoggedIn();
     try {
+        args[0] = current_directory + "/" + args[0];
+        args[1] = current_directory + "/" + args[1];
         execShellCommand("mv", args); 
     } catch(...) {
         throw Exception();
