@@ -13,7 +13,9 @@ std::string Response::getMessage(int code) {
     if (code == HELP_OK)
         return HELP_MESSAGE;
     if (code == RENAME_OK)
-        return "250: Successful change";
+        return "250: Successful change.";
+    if (code == QUIT_OK)
+        return "221: Successful Quit.";
     return "response";
 }
 
@@ -23,7 +25,7 @@ std::string Response::getMessage(int code, std::string response) {
     if (code == MKD_OK)
         return "257: " + response + " created.";
     if (code == DELE_OK)
-        return "250: " + response + " deleted.";
+        return "250: " + response + " deleted."; 
     return "response";
 }
 

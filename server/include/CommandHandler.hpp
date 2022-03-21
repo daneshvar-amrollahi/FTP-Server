@@ -27,7 +27,7 @@ public:
     int handleCwd(std::vector<std::string> args);
     int handleRename(std::vector<std::string> args);
     std::string handleRetr(std::vector<std::string> args);
-    std::string handleQuit(std::vector<std::string> args);
+    int handleQuit(std::vector<std::string> args);
     std::string execShellCommand(const char *command, std::vector<std::string> args);
 
 

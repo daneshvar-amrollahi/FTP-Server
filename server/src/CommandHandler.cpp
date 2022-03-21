@@ -68,7 +68,7 @@ std::string CommandHandler::runCommand(std::string input) {
         }
         else
         if (command == "quit") {
-            return response.getMessage(LS_OK) + ";" + handleQuit(args);
+            return response.getMessage(handleQuit(args));
         }
         else
             throw SyntaxErrorInParamsOrArgs();
@@ -252,11 +252,14 @@ std::string CommandHandler::handleRetr(std::vector<std::string> args) {
     }
 }
 
-std::string CommandHandler::handleQuit(std::vector<std::string> args) {
+int CommandHandler::handleQuit(std::vector<std::string> args) {
     if (!logged_in)
         throw NotLoggedIn();
     try {
-        return execShellCommand("mv", args); 
+        logged_in = false;
+        current_user = NULL;
+        is_admin = false;
+        return QUIT_OK;
     } catch(...) {
         throw Exception();
     }
