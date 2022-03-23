@@ -7,9 +7,7 @@ class Logger
 {
 public:
     Logger();
-    void writeMessage(std::string message);
-private:
-    std::ofstream lout;
+    static void writeMessage(std::string message);
 };
 
 #endif

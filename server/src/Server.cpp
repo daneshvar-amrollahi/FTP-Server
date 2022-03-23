@@ -83,8 +83,10 @@ void* handleConnection(void* arguments) {
     while (true)
     {
         memset(read_buffer, 0, 1024);
-        if (recv(command_fd, read_buffer, sizeof(read_buffer), 0) > 0)
+        if (recv(command_fd, read_buffer, sizeof(read_buffer), 0) > 0){
             send_buffer = commandHandler->runCommand(std::string(read_buffer));
+            Logger::writeMessage("fd"+std::to_string(command_fd)+" request: "+std::string(read_buffer)+" response: "+getCommandChMessage(send_buffer+";"));
+        }
 
         if (!needsDataChannel(send_buffer))
         {
