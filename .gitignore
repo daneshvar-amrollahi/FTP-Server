@@ -1,3 +1,4 @@
 *.o
 *.out
 server/log.txt
+.vscode/
